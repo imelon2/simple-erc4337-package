@@ -1,0 +1,15 @@
+services:
+  rundler-node:
+    image: alchemyplatform/rundler:v0.8.3
+    command: node
+    environment:
+      - RUST_LOG=info
+      - CHAIN_ID=1337
+      - NODE_HTTP=http://host.docker.internal:8545
+      - SIGNER_PRIVATE_KEYS=0xc9d3cc38292cb0185be663e028428796616c4d90569f3ba7f50358f6324fbd4c,0x7575962aed3d3f712a0dd3d9255dee8a4f6e0a812415a8e8dd06d67ea2d233ca
+      - BUNDLER_PRIVATE_KEY=0xc9d3cc38292cb0185be663e028428796616c4d90569f3ba7f50358f6324fbd4c
+      - UNSAFE=true
+      - DISABLE_ENTRY_POINT_V0_6=true
+    ports:
+      - "3000:3000" # RPC
+      - "8000:8000" # Metric

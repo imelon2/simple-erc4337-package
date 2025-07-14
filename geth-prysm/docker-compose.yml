@@ -1,0 +1,150 @@
+version: "3.9"
+services:
+  create-beacon-chain-genesis:
+    image: "gcr.io/prysmaticlabs/prysm/cmd/prysmctl:latest"
+    command:
+      - testnet
+      - generate-genesis
+      - --fork=deneb
+      - --num-validators=64
+      - --output-ssz=/devnet/config/genesis.ssz
+      - --chain-config-file=/devnet/config/config.yml
+      - --geth-genesis-json-in=/devnet/config/genesis.json
+      - --geth-genesis-json-out=/devnet/config/genesis.json
+    volumes:
+      - ./config:/devnet/config
+
+  geth-genesis:
+    image: "ethereum/client-go:stable"
+    command: --datadir=/devnet/execution/data --db.engine=leveldb init /devnet/config/genesis.json
+    volumes:
+      - ./node/consensus:/devnet/consensus
+      - ./node/execution:/devnet/execution
+      - ./config/genesis.json:/devnet/config/genesis.json
+    depends_on:
+      create-beacon-chain-genesis:
+        condition: service_completed_successfully
+
+  beacon-chain:
+    container_name: eth-beacon-node
+    image: "gcr.io/prysmaticlabs/prysm/beacon-chain:v5.1.2"
+    command:
+      - --datadir=/devnet/consensus/beacondata
+      - --genesis-state=/devnet/config/genesis.ssz
+      - --interop-eth1data-votes
+      - --chain-config-file=/devnet/config/config.yml
+      - --contract-deployment-block=0
+      - --chain-id=1337
+      - --rpc-host=0.0.0.0
+      - --rpc-port=4000
+      - --grpc-gateway-host=0.0.0.0
+      - --grpc-gateway-port=3500
+      - --execution-endpoint=http://geth:8551
+      - --accept-terms-of-use
+      - --jwt-secret=/devnet/config/jwtsecret
+      - --suggested-fee-recipient=0x433709CF62264892851143deCF13094080aeEDF9
+      - --enable-debug-rpc-endpoints
+      - --force-clear-db
+      - --minimum-peers-per-subnet=0
+      - --p2p-tcp-port=13000
+      - --p2p-udp-port=12000
+      - --peer=${PEER:-}
+      - --checkpoint-sync-url=${CHECKPOINT_SYNC_URL:-}
+      - --genesis-beacon-api-url=${CHECKPOINT_SYNC_URL:-}
+      - --bootstrap-node=${BOOT_STRAP_NODE:-}
+      - --min-sync-peers=0
+    ports:
+      - 127.0.0.1:4000:4000
+      - 127.0.0.1:3500:3500
+      - 127.0.0.1:13000:13000
+      - 127.0.0.1:12000:12000/udp
+    volumes:
+      - ./config:/devnet/config
+      - ./node/consensus:/devnet/consensus
+      - ./node/execution:/devnet/execution
+    depends_on:
+      create-beacon-chain-genesis:
+        condition: service_completed_successfully
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1g"
+        max-file: "3"
+
+  geth:
+    container_name: eth-geth-node
+    image: "ethereum/client-go:latest"
+    command:
+      - --datadir=/devnet/execution/data
+      - --syncmode=full
+      - --networkid=1337
+      - --port=30303
+      - --http
+      - --http.api=eth,net,debug,web3
+      - --http.addr=0.0.0.0
+      - --http.port=8545
+      - --http.corsdomain=*
+      - --http.vhosts=*
+      - --ws
+      - --ws.api=eth,net,web3
+      - --ws.addr=0.0.0.0
+      - --ws.port=8546
+      - --ws.origins=*
+      - --authrpc.vhosts=*
+      - --authrpc.addr=0.0.0.0
+      - --authrpc.port=8551
+      - --authrpc.jwtsecret=/devnet/config/jwtsecret
+      - --nodiscover
+      - --db.engine=leveldb
+      - --rpc.allow-unprotected-txs=true
+    ports:
+      - 127.0.0.1:30303:30303 # AUTH RPC
+      - 127.0.0.1:8551:8551 # AUTH RPC
+      - 127.0.0.1:8545:8545 # RPC
+      - 127.0.0.1:8546:8546 # WS
+    volumes:
+      - ./node/execution:/devnet/execution
+      - ./config:/devnet/config
+    depends_on:
+        geth-genesis:
+          condition: service_completed_successfully
+        beacon-chain:
+          condition: service_started
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1g"
+        max-file: "3"
+
+  validator:
+    container_name: eth-validator-node
+    image: "gcr.io/prysmaticlabs/prysm/validator:stable"
+    command:
+      - --datadir=/devnet/consensus/validatordata
+      - --chain-config-file=/devnet/config/config.yml
+      - --beacon-rpc-provider=beacon-chain:4000
+      - --accept-terms-of-use
+      - --interop-num-validators=64
+      - --enable-db-backup-webhook=true
+      - --rpc-host=0.0.0.0
+      - --rpc-port=7000
+      - --grpc-gateway-host=0.0.0.0
+      - --grpc-gateway-port=7000
+      - --monitoring-host=0.0.0.0
+      - --monitoring-port=8081
+      - --force-clear-db
+    ports:
+      - 127.0.0.1:7000:7000
+      - 127.0.0.1:7500:7500
+      - 127.0.0.1:8081:8081
+    volumes:
+      - ./node/consensus:/devnet/consensus
+      - ./config:/devnet/config
+    depends_on:
+      beacon-chain:
+        condition: service_started
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1g"
+        max-file: "3"
