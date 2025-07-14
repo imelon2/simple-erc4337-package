@@ -10,7 +10,8 @@ This setup is ideal for developers who want to:
 
 Whether you are building **smart wallets**, paymasters, bundler, or simply want to learn more about account abstraction, this package provides a streamlined foundation for rapid development and experimentation.
 
-> [!IMPORTANT] ERC-4337 Entry Point Version Support
+> [!IMPORTANT] 
+> **ERC-4337 Entry Point Version Support**
 > This package is designed to be fully compatible with [EntryPoint v0.7.0](https://github.com/eth-infinitism/account-abstraction/tree/v0.7.0), and all contracts and scripts work seamlessly with this version’s ERC-4337 features and [specifications](https://github.com/eth-infinitism/account-abstraction/releases).
 
 
