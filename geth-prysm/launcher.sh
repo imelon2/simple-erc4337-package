@@ -13,7 +13,7 @@ case "$1" in
         echo "Clear go-ethereum & Beacon & validator DB -- 🗑️"
         rm -rf $SCRIPT_DIR/node/consensus/beacondata $SCRIPT_DIR/node/consensus/validatordata
         rm -rf $SCRIPT_DIR/node/execution/data/geth
-        rm -rf $SCRIPT_DIR/node/execution/geth.ipc
+        rm -rf $SCRIPT_DIR/node/execution/data/geth.ipc
         ;;
     "help" | "h")
         func_help

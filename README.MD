@@ -23,6 +23,11 @@ Whether you are building **smart wallets**, paymasters, bundler, or simply want 
 - Build **simple Paymaster server based [ERC-7677](https://eips.ethereum.org/EIPS/eip-7677)** for gas sponsorship using **[imelon2/simple-paymaster-server](https://github.com/imelon2/simple-paymaster-server)**.
 - Execute script for *create UserOp* and *call bundler, paymaster RPC* using **[Viem](https://viem.sh/account-abstraction)**.
 
+## Quick start
+```
+make all
+```
+
 ## Requirement
 TODO....
 
@@ -31,7 +36,7 @@ TODO....
 | ------------- | --------------------------- |
 | Node RPC      | `http://localhost:8545`     |
 | Bundler RPC*  | `http://localhost:3000/rpc` |
-| Paymaster API | `http://localhost:3500`     |
+| Paymaster API | `http://localhost:4001`     |
 
 
 ## Address Info
