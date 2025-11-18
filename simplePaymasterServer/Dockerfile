@@ -5,8 +5,8 @@ RUN apt-get update && \
     
 WORKDIR /workspace  
 
-RUN git clone https://github.com/imelon2/simple-paymaster-server.git ./
+RUN git clone https://github.com/imelon2/erc4337-paymaster-server ./
 
-RUN yarn install
+RUN npm install
 
-ENTRYPOINT ["yarn"]
+ENTRYPOINT ["npm"]

@@ -8,6 +8,8 @@ all: geth deploy/entry deploy/pm rundler pm
 
 re-all: geth/force deploy/entry deploy/pm rundler/force pm
 
+re-no-pm: geth/force deploy/entry rundler/force
+
 geth:
 	@echo Building geth node...
 	@$(GETH_COMPOSE_RUN) up -d > /dev/null 2>&1
@@ -64,8 +66,9 @@ server/pm:
 	-e BUNDLER_URL=http://host.docker.internal:3000 \
 	-e PROVIDER_URL=http://host.docker.internal:8545 \
 	-e PAYMASTER_ADDRESS=0x064Fbec1c03eC4004E7f9ADc5FAe2e2fB1857064 \
-	-e PAYMASTER_PK=0xfefcc139ed357999ed60c6a013947328d52e7d9751e93fd0274a2bfae5cbcb12 \
-	-e ENTRYPOINT_ADDRESS=0x0000000071727De22E5E9d8BAf0edAc6f37da032 \
+	-e PM_SIGNER_PK=0xfefcc139ed357999ed60c6a013947328d52e7d9751e93fd0274a2bfae5cbcb12 \
+	-e ENTRY_POINT_ADDRESS=0x0000000071727De22E5E9d8BAf0edAc6f37da032 \
 	-e VERBOSITY=debug \
 	-e PORT=4000 \
+	-e NODE_ENV=development \
 	simple-paymaster-server start

@@ -20,16 +20,30 @@ Whether you are building **smart wallets**, paymasters, bundler, or simply want 
 - Build bundler using **[Alchemy Rundler](https://github.com/alchemyplatform/rundler)**.
 - Deploy `EntryPoint.sol`, `SimpleAccount.sol`, `SimpleAccountFactory.sol` by **[eth-infinitism/account-abstraction](https://github.com/eth-infinitism/account-abstraction/tree/v0.7.0)**.
 - Deploy `VerifyingPaymaster.sol` using **[imelon2/simple-paymaster-contract](https://github.com/imelon2/simple-paymaster-contract)** and interact with paymaster contracts using the `forge cast` CLI tool.
-- Build **simple Paymaster server based [ERC-7677](https://eips.ethereum.org/EIPS/eip-7677)** for gas sponsorship using **[imelon2/simple-paymaster-server](https://github.com/imelon2/simple-paymaster-server)**.
+- Build **simple Paymaster server based [ERC-7677](https://eips.ethereum.org/EIPS/eip-7677)** for gas sponsorship using **[imelon2/paymaster-server](https://github.com/imelon2/erc4337-paymaster-server)** NestJS based.
 - Execute script for *create UserOp* and *call bundler, paymaster RPC* using **[Viem](https://viem.sh/account-abstraction)**.
 
 ## Quick start
+### (1) Run Geth & Bundler & Paymaster Server (~60s)
 ```
 make all
+
+# reset and re-run
+make re-all
 ```
 
-## Requirement
-TODO....
+### (2) Send UserOperation Transaction
+```
+# ts-node script/sendUserOp.ts
+yarn run send:op
+```
+
+### (3) Send Paymaster UserOperation Transaction
+```
+# ts-node script/sendPaymasterUserOp.ts 
+yarn run send:pm
+```
+
 
 ## RPC Info
 | Service       | URL                         |
@@ -54,5 +68,7 @@ TODO....
 |----------------------	|--------------------------------------------	|
 | EntryPoint v0.7.0    	| 0x0000000071727De22E5E9d8BAf0edAc6f37da032 	|
 | Paymaster            	| 0x064Fbec1c03eC4004E7f9ADc5FAe2e2fB1857064 	|
+| SimpleAccount     	| 0x68641DE71cfEa5a5d0D29712449Ee254bb1400C2 	|
 | SimpleAccountFactory 	| 0x91E60e0613810449d098b0b5Ec8b51A0FE8c8985 	|
 | CreateX              	| 0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed 	|
+| deterministic-deployment-proxy| 0x4e59b44847b379578588920ca78fbf26c0b4956c 	|
