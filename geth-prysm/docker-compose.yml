@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   create-beacon-chain-genesis:
-    image: "gcr.io/prysmaticlabs/prysm/cmd/prysmctl:latest"
+    image: "gcr.io/prysmaticlabs/prysm/cmd/prysmctl:v5.1.2"
     command:
       - testnet
       - generate-genesis
@@ -15,7 +15,7 @@ services:
       - ./config:/devnet/config
 
   geth-genesis:
-    image: "ethereum/client-go:stable"
+    image: "ethereum/client-go:v1.14.13"
     command: --datadir=/devnet/execution/data --db.engine=leveldb init /devnet/config/genesis.json
     volumes:
       - ./node/consensus:/devnet/consensus
@@ -73,7 +73,7 @@ services:
 
   geth:
     container_name: eth-geth-node
-    image: "ethereum/client-go:latest"
+    image: "ethereum/client-go:v1.14.13"
     command:
       - --datadir=/devnet/execution/data
       - --syncmode=full
@@ -118,7 +118,7 @@ services:
 
   validator:
     container_name: eth-validator-node
-    image: "gcr.io/prysmaticlabs/prysm/validator:stable"
+    image: "gcr.io/prysmaticlabs/prysm/validator:v5.1.2"
     command:
       - --datadir=/devnet/consensus/validatordata
       - --chain-config-file=/devnet/config/config.yml

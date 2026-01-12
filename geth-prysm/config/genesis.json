@@ -15,13 +15,13 @@
 		"londonBlock": 0,
 		"arrowGlacierBlock": 0,
 		"grayGlacierBlock": 0,
-		"shanghaiTime": 1763434029,
-		"cancunTime": 1763434029,
+		"shanghaiTime": 1768203112,
+		"cancunTime": 1768203112,
 		"terminalTotalDifficulty": 0,
-		"depositContractAddress": "0x0000000000000000000000000000000000000000"
+		"terminalTotalDifficultyPassed": true
 	},
 	"nonce": "0x0",
-	"timestamp": "0x691bde2d",
+	"timestamp": "0x6964a368",
 	"extraData": "0x00000000000000000000000000000000000000000000000000000000000000002865c9f0e500844a78ec31fffacc15e048c940290000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
 	"gasLimit": "0x1c9c380",
 	"difficulty": "0x1",
