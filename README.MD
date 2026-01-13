@@ -3,9 +3,10 @@
 # Overview
 <div align="center">
 
-<img src="./asset/package.png" width="65%">
+<img src="./asset/package.png" width="75%">
 
 </div>
+
 This repository is an all-in-one local development environment for experimenting with **[ERC-4337](https://eips.ethereum.org/EIPS/eip-4337)** account abstraction on Ethereum for end-to-end testing. </br>
 This setup is ideal for developers who want to:
 
